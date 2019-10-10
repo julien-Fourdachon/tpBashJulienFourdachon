@@ -134,7 +134,7 @@ changeDirectoriesName
 echo "\e[92mVotre machine est en cours d'installation...\e[0m"
 
 stopMachine
-installPackages
+# installPackages
 vagrant status --machine-readable | grep state,running
 echo "\e[92mVoici la liste des vm en cours d'utilisation sur la système \e[0m"
 #finalize Vagranfile
