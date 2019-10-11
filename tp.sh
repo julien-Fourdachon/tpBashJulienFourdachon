@@ -79,29 +79,29 @@ stopMachine () {
 }
 
 # To finish , cat the vagrantfile is not so bad.... nearly
-#installPackages () {
-#    echo "\e[92mVoulez-vous installer les paquets Mysql Php7.0 et Apach2 ? (oui/non) \e[0m"
-#    read paquetResponse
-#
-#    case $paquetResponse in
-#        "oui")  echo "config.vm.provision \"shell\", inline: <<-SHELL\n 
-#                sudo apt-get -y update\n
-#                sudo apt-get -y install apache2\n
-#                sudo debconf-set-selections <<< \"mysql-server mysql-server/0000\"\n
-#                sudo debconf-set-selections <<< \"mysql-server mysql-server/0000\"\n
-#                sudo apt-get -y install mysql-server\n
-#                sudo apt-get -y install php7.0\n
-#                SHELL \n
-#                end" >> Vagrantfile       
-#                ;;
-#        "non") echo "\e[92mTrès bien, nous allons lancer la Vm en ssh, enjoy!)\e[0m"
-#            ;;
-#        *)  echo "\e[92mMerci de répondre par oui ou par non\e[0m"
-#            install
-#            ;; 
-#    esac
-#
-#}
+installPackages () {
+    echo "\e[92mVoulez-vous installer les paquets Mysql Php7.0 et Apach2 ? (oui/non) \e[0m"
+    read paquetResponse
+
+    case $paquetResponse in
+        "oui")  sed -i -e "s/end/config.vm.provision \"shell\", inline: <<-SHELL\n
+                sudo apt-get -y update\
+                sudo apt-get -y install apache2\
+                sudo debconf-set-selections <<< \"mysql-server mysql-server/0000\"\
+                sudo debconf-set-selections <<< \"mysql-server mysql-server/0000\"\
+                sudo apt-get -y install mysql-server\n
+                sudo apt-get -y install php7.0\n
+                SHELL\
+                end/g" >> Vagrantfile       
+                ;;
+        "non") echo "\e[92mTrès bien, nous allons lancer la Vm en ssh, enjoy!)\e[0m"
+            ;;
+        *)  echo "\e[92mMerci de répondre par oui ou par non\e[0m"
+            installPackages
+            ;; 
+    esac
+
+}
 
 # strating script
 if [ ! dpkg -s 'vagrant' >/dev/null 2>&1 ]
@@ -132,13 +132,14 @@ changeDirectoriesName
 
 
 echo "\e[92mVotre machine est en cours d'installation...\e[0m"
+echo "end" >> Vagrantfile
 
-stopMachine
-# installPackages
-vagrant status --machine-readable | grep state,running
-echo "\e[92mVoici la liste des vm en cours d'utilisation sur la système \e[0m"
 #finalize Vagranfile
 vagrant up
+echo "\e[92mVoici la liste des vm en cours d'utilisation sur la système \e[0m"
+vagrant status --machine-readable | grep state,running
+stopMachine
+installPackages
 echo "\e[92mVous allez être connecté à votre machine en ssh\e[0m"
 vagrant ssh
 
