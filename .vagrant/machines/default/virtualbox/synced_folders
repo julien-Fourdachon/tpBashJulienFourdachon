@@ -1,1 +1,0 @@
-{"virtualbox":{"/var/www/html":{"guestpath":"/var/www/html","hostpath":"/home/apprenant/Bureau/dfs17/tp/data","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/apprenant/Bureau/dfs17/tp","disabled":false,"__vagrantfile":true}}}

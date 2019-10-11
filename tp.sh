@@ -84,16 +84,8 @@ installPackages () {
     read paquetResponse
 
     case $paquetResponse in
-        "oui")  sed -i -e "s/end/config.vm.provision \"shell\", inline: <<-SHELL\n
-                sudo apt-get -y update\
-                sudo apt-get -y install apache2\
-                sudo debconf-set-selections <<< \"mysql-server mysql-server/0000\"\
-                sudo debconf-set-selections <<< \"mysql-server mysql-server/0000\"\
-                sudo apt-get -y install mysql-server\n
-                sudo apt-get -y install php7.0\n
-                SHELL\
-                end/g" >> Vagrantfile       
-                ;;
+        "oui") vagrant ssh -c "sudo apt update -y && sudo apt -y install php7.0 && sudo apt -y install apache2 && sudo apt -y install mysql-server"             
+               ;; 
         "non") echo "\e[92mTrès bien, nous allons lancer la Vm en ssh, enjoy!)\e[0m"
             ;;
         *)  echo "\e[92mMerci de répondre par oui ou par non\e[0m"
@@ -142,4 +134,3 @@ stopMachine
 installPackages
 echo "\e[92mVous allez être connecté à votre machine en ssh\e[0m"
 vagrant ssh
-
